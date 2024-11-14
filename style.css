@@ -1,5 +1,5 @@
 body {
-  padding: 0;
+  margin: 0;
   background: #202030;
   position: fixed;
   height: 100%;
@@ -12,23 +12,24 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 3s;
+  position: absolute;
+  inset: 0;
 }
 
 #kalender {
- width: 1200px;
- border: solid 2px red;
- height: 800px;
- display: flex;
- justify-content: center;
- align-items: center;
- background: repeating-linear-gradient(
-  45deg,
-  #aa1010,
-  #aa1010 10px,
-  #ffffff 10px,
-  #ffffff 20px
-);
-position: relative;
+  width: 1200px;
+  border: solid 2px red;
+  height: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: repeating-linear-gradient(45deg,
+      #aa1010,
+      #aa1010 10px,
+      #ffffff 10px,
+      #ffffff 20px);
+  position: relative;
 }
 
 #holly {
@@ -37,7 +38,7 @@ position: relative;
   left: 0;
   width: 18rem;
   rotate: -35deg;
-  transform: translate(-25%,-80%);
+  transform: translate(-25%, -80%);
 }
 
 #inner_kalender {
@@ -47,8 +48,81 @@ position: relative;
   background: #ffffff;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
+  margin: 1;
 }
 
 .boks_kalender {
   border: solid 1px red;
+  font-size: 3rem;
+  margin: 1rem;
+  border-radius: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  color: black;
+  background: repeating-linear-gradient(45deg,
+      #aa1010,
+      #aa1010 10px,
+      #ffffff 10px,
+      #ffffff 20px);
+}
+
+
+.child_boks {
+  color: black;
+  aspect-ratio: 1/1;
+  width: 80%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1rem;
+  transition: transform 3s;
+}
+
+.opened {
+  background: #000000;
+  color: white;
+  animation: box_drop 1.25s;
+  animation-fill-mode: forwards;
+  z-index: 200;
+  position: relative;
+}
+
+
+
+@keyframes box_drop {
+  0% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+  }
+  25% {
+    transform: translateY(-200%);
+    animation-timing-function: ease-in;
+  }
+  100% {
+    transform: translateY(100vh);
+    animation-timing-function: ease-in;
+  }
+}
+
+.scene_2 {
+  transform: translateY(-100vh);
+}
+
+.scene_2_2 {
+  transform: translateY(100vh);
+}
+
+.light_off {
+  position: fixed;
+  inset: 0;
+  background-color: black;
+  opacity: 0;
+  transition: opacity 2s;
+}
+
+.light_off_trans {
+  opacity: 0.7;
 }
