@@ -48,7 +48,13 @@ body {
   background: #ffffff;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  margin: 1;
+}
+
+#presents_container {
+  background: #ffffff;
+  width: calc(100% - 2rem);
+  height: calc(100% - 2rem);
+  border: red 2px solid;
 }
 
 .boks_kalender {
@@ -125,4 +131,11 @@ body {
 
 .light_off_trans {
   opacity: 0.7;
+}
+
+#winner {
+  text-align: center;
+  position: relative;
+  top: 30%;
+  font-size: 4rem;
 }
