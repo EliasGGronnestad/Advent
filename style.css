@@ -7,18 +7,63 @@ body {
 }
 
 .center {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   transition: 3s;
   position: absolute;
   inset: 0;
+  align-content: center;
 }
 
-#kalender {
+.candyBorder {
+  background: repeating-linear-gradient(45deg,
+      #aa1010,
+      #aa1010 10px,
+      #ffffff 10px,
+      #ffffff 20px);
+  padding: 1rem;
+  width: min-content;
+  margin: auto;
+  border-radius: 1rem;
+  width: min(900px, 90%);
+}
+
+tr {
+  width: max-content;
+}
+
+.menu {
+  background-color: white;
+  background-color: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  min-height: 300px;
+  align-content: center;
+  padding-bottom: 4rem;
+}
+
+.menuCenter {
+  width: min(60%, 400px);
+  margin: auto;
+}
+
+.menuCenter h1 {
+  text-align: center;
+}
+
+
+.vAlign {
+  width: 100%;
+  height: 100%;
+  align-content: center;
+}
+
+#logout {
+  background-color: white;
+  padding: 4px 8px;
+}
+
+.kalender {
   width: 1200px;
+  margin: auto;
   border: solid 2px red;
   height: 800px;
   display: flex;
@@ -55,6 +100,7 @@ body {
   width: calc(100% - 2rem);
   height: calc(100% - 2rem);
   border: red 2px solid;
+  position: relative;
 }
 
 .boks_kalender {
@@ -121,16 +167,113 @@ body {
   transform: translateY(100vh);
 }
 
+.light1 {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  background: rgb(255, 255, 220 );
+  opacity: 0.0;
+  clip-path: polygon(85% 0, 90% 0, 135% 100%, 110% 100%);
+  transition: all 2s;
+}
+
+.light2 {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  background: rgb(255, 255, 220 );
+  opacity: 0.0;
+  clip-path: polygon(55% 0, 60% 0, 135% 100%, 110% 100%);
+  transition: all 2s;
+}
+
+.light3 {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  background: rgb(255, 255, 220 );
+  opacity: 0.0;
+  clip-path: polygon(0% 0, 5% 0, -10% 100%, -35% 100%);
+  transition: all 2s;
+}
+
+.light_trans1 {
+  opacity: 0.7;
+  clip-path: polygon(85% 0, 90% 0, 35% 100%, 10% 100%);
+}
+
+.light_trans2 {
+  opacity: 0.7;
+  clip-path: polygon(55% 0, 60% 0, 60% 100%, 40% 100%);
+}
+
+.light_trans3 {
+  opacity: 0.7;
+  clip-path: polygon(10% 0, 15% 0, 90% 100%, 65% 100%);
+}
+
 .light_off {
   position: fixed;
+  z-index: 999;
   inset: 0;
   background-color: black;
   opacity: 0;
   transition: opacity 2s;
+  pointer-events: none;
+  
 }
 
 .light_off_trans {
   opacity: 0.7;
+}
+
+.presentBar {
+  position: absolute;
+  bottom: 0;
+  width: 600%;
+  display: flex;
+  justify-content: space-evenly;
+  transition: width 1s;
+}
+
+.pSlideIn {
+  width: 100%;
+}
+
+.present {
+  height: 120px;
+  width: 100px;
+  position: relative;
+}
+
+.base {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.lid {
+  position: absolute;
+  top: 0;
+  left: -10%;
+  width: 120%;
+  transition: top 1s;
+
+}
+
+.presentOpened0 .lid {
+  top: -10rem;
+}
+
+.presentOpened1 .lid {
+  top: -10rem;
+}
+
+.presentOpened2 .lid {
+  top: -10rem;
 }
 
 #winner {

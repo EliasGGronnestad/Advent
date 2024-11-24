@@ -1,6 +1,5 @@
 let canInteract = true;
-let elev_pool = undefined;
-let is_opened = [];
+let elev_pool = [];
 
 fetch("Elever_2024.csv")
   .then((response) => response.arrayBuffer())
@@ -10,12 +9,6 @@ fetch("Elever_2024.csv")
     const rows = text.split("\n").map((row) => row.split(";"));
     elev_pool = rows;
   });
-
-fetch("elev_pool.php")
-  .then((response) => response.json())
-  .then((data) => {
-  })
-  .catch((error) => console.error("Failed to fetch elev_pool:", error));
 
 function _body_onload() {
   const kalender = document.getElementById("inner_kalender");
@@ -28,7 +21,7 @@ function _body_onload() {
     child_boks.classList.add("child_boks");
     child_boks.innerText = index + 1;
     child_boks.id = index;
-    child_boks.addEventListener("click", function () {
+    child_boks.addEventListener("click", function() {
       boks_click(index);
     });
     boks.appendChild(child_boks);
@@ -47,31 +40,65 @@ function boks_click(index) {
     }, 1500);
     document.getElementById(index).classList.add("opened");
     setTimeout(() => {
-      const lights_off = document.createElement("div");
-      lights_off.classList.add("light_off");
-      lights_off.id = "lights_off";
-      document.getElementById("body").appendChild(lights_off);
+      document.querySelector(".presentBar").classList.add("pSlideIn");
+      pullName(index);
+
+      let i = 0;
+      document.querySelectorAll(".present").forEach((present, index) => {
+        present.addEventListener("click", function () {
+          openPresent(index);
+        })
+        i++;
+      });
+      
+
     }, 4000);
     setTimeout(() => {
       document.getElementById("lights_off").classList.add("light_off_trans");
+      document.querySelector(".light1").classList.add("light_trans1");
+      document.querySelector(".light2").classList.add("light_trans2");
+      document.querySelector(".light3").classList.add("light_trans3");
     }, 4500);
     setTimeout(() => {
-      pullName(index);
-    }, 6500);
-    setTimeout(() => {
       canInteract = true;
-      console.log(canInteract);
     }, 10000);
   }
 }
 
 function pullName(dateIndex) {
-  if (elev_pool) {
-    const pull = Math.floor(Math.random() * elev_pool.length) + 1;
-    document.getElementById("winner").innerText = elev_pool[pull][0] + " " +
-      elev_pool[pull][1] + " " + elev_pool[pull][2];
-    console.log(elev_pool[40]);
-    elev_pool.splice(pull, 1);
-    is_opened.push(dateIndex);
-  }
+  fetch("regNavn.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  })
+    .then((response) => {
+      return response.text();
+    })
+    .then((data) => {
+      //Henter full klasseliste fra server
+      const get_liste = data;
+      const rader = get_liste.trim().split("\n");
+      elev_pool = rader.map((rad) => (rad.split(";")));
+      elev_pool.shift();
+
+      //Skiller listene inn etter trinn
+      const elev_pool_1 = elev_pool.filter((rad) => {
+        return rad[rad.length - 1][0] === "1";
+      });
+      const elev_pool_2 = elev_pool.filter((rad) => {
+        return rad[rad.length - 1][0] === "2";
+      });
+      const elev_pool_3 = elev_pool.filter((rad) => {
+        return rad[rad.length - 1][0] === "3";
+      });
+
+      const pull1 = Math.floor(Math.random() * elev_pool_1.length);
+      const pull2 = Math.floor(Math.random() * elev_pool_2.length);
+      const pull3 = Math.floor(Math.random() * elev_pool_3.length);
+    });
+}
+
+function openPresent(index) {
+  document.querySelectorAll(".present")[index].classList.add(`presentOpened${index}`);
 }
