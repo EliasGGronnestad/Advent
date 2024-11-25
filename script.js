@@ -1,14 +1,12 @@
 let canInteract = true;
 let elev_pool = [];
 
-fetch("Elever_2024.csv")
-  .then((response) => response.arrayBuffer())
-  .then((buffer) => {
-    const decoder = new TextDecoder("iso-8859-1"); // Change to the appropriate encoding if needed
-    const text = decoder.decode(buffer);
-    const rows = text.split("\n").map((row) => row.split(";"));
-    elev_pool = rows;
-  });
+let elev_pool_1 = [];
+let elev_pool_2 = [];
+let elev_pool_3 = [];
+let pull1 = "";
+let pull2 = "";
+let pull3 = "";
 
 function _body_onload() {
   const kalender = document.getElementById("inner_kalender");
@@ -21,7 +19,7 @@ function _body_onload() {
     child_boks.classList.add("child_boks");
     child_boks.innerText = index + 1;
     child_boks.id = index;
-    child_boks.addEventListener("click", function() {
+    child_boks.addEventListener("click", function () {
       boks_click(index);
     });
     boks.appendChild(child_boks);
@@ -31,7 +29,6 @@ function _body_onload() {
 function boks_click(index) {
   if (canInteract) {
     canInteract = false;
-    console.log(canInteract);
     setTimeout(() => {
       const kalenderScene = document.getElementById("kalenderScene");
       const presentScene = document.getElementById("presentScene");
@@ -43,16 +40,15 @@ function boks_click(index) {
       document.querySelector(".presentBar").classList.add("pSlideIn");
       pullName(index);
 
+      //For å åpne hver presang
       let i = 0;
       document.querySelectorAll(".present").forEach((present, index) => {
-        present.addEventListener("click", function () {
-          openPresent(index);
-        })
+        present.addEventListener("click", function () { openPresent(index) })
         i++;
       });
-      
-
     }, 4000);
+
+    //Animasjoner for lyskasterene
     setTimeout(() => {
       document.getElementById("lights_off").classList.add("light_off_trans");
       document.querySelector(".light1").classList.add("light_trans1");
@@ -65,11 +61,13 @@ function boks_click(index) {
   }
 }
 
+//Henter gyldig liste av elever
 function pullName(dateIndex) {
   fetch("regNavn.php", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
+      "what-post": "get-list",
     },
   })
     .then((response) => {
@@ -78,27 +76,59 @@ function pullName(dateIndex) {
     .then((data) => {
       //Henter full klasseliste fra server
       const get_liste = data;
-      const rader = get_liste.trim().split("\n");
+      const rader = get_liste.trim().split("\r\n");
       elev_pool = rader.map((rad) => (rad.split(";")));
       elev_pool.shift();
 
       //Skiller listene inn etter trinn
-      const elev_pool_1 = elev_pool.filter((rad) => {
+      elev_pool_1 = elev_pool.filter((rad) => {
         return rad[rad.length - 1][0] === "1";
       });
-      const elev_pool_2 = elev_pool.filter((rad) => {
+      elev_pool_2 = elev_pool.filter((rad) => {
         return rad[rad.length - 1][0] === "2";
       });
-      const elev_pool_3 = elev_pool.filter((rad) => {
+      elev_pool_3 = elev_pool.filter((rad) => {
         return rad[rad.length - 1][0] === "3";
       });
 
-      const pull1 = Math.floor(Math.random() * elev_pool_1.length);
-      const pull2 = Math.floor(Math.random() * elev_pool_2.length);
-      const pull3 = Math.floor(Math.random() * elev_pool_3.length);
+      //Velger en vinner fra hvert trinn
+      pull1 = Math.floor(Math.random() * elev_pool_1.length);
+      pull2 = Math.floor(Math.random() * elev_pool_2.length);
+      pull3 = Math.floor(Math.random() * elev_pool_3.length);
+
+      console.log(pull3);
+
     });
+
+
 }
 
 function openPresent(index) {
+  let pullIndex = 0;
+  console.log(index);
+  console.log(index === 0);
+  if (index === 0) {
+    pullIndex = pull1;
+  };
+  if (index === 1) {
+    pullIndex = pull2
+  };
+  if (index === 2) {
+    pullIndex = pull3
+  };
   document.querySelectorAll(".present")[index].classList.add(`presentOpened${index}`);
+  const pull = [index, pullIndex, elev_pool_1.length, elev_pool_2.length, elev_pool_3.length];
+
+  fetch("regNavn.php", {
+    "method": "POST",
+    "headers": {
+      "Content-Type": "text/plain",
+      "what-post": "send-pull",
+    },
+    "body": JSON.stringify(pull),
+  }).then(data => {
+    return data.text()
+  }).then(response => {
+    console.log(response);
+  })
 }
