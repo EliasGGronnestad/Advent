@@ -5,7 +5,10 @@ error_reporting(E_ALL);
 
 $filePath = "elev_pool.csv";
 
+$jsonSavedResults = "savedResults.json";
+
 $pull = [];
+
 
 if (!isset($navnListe)) {
   $navn = mb_convert_encoding(file_get_contents("http://it-forlaget.no/Data/Elever2024.csv"), "UTF-8", "auto");
@@ -13,15 +16,16 @@ if (!isset($navnListe)) {
 }
 
 
-$csv = file_get_contents($filePath);
+$liste = [];
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && getallheaders()["what-post"] === "get-list") {
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && getallheaders()["What-Post"] === "get-list") {
   header("Content-Type: text/plain");
+  $csv = file_get_contents($filePath);
   echo $csv;
   exit;
 }
 
-$liste = [];
 
 if (($handle = fopen($filePath, "r")) !== false) {
 
@@ -29,9 +33,9 @@ if (($handle = fopen($filePath, "r")) !== false) {
     $liste[] = $row;
   }
   fclose($handle);
+  array_shift($liste);
 }
 
-array_shift($liste);
 
 function updateListFile()
 {
@@ -46,10 +50,12 @@ function updateListFile()
   }
 }
 
+
 updateListFile();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && getallheaders()["what-post"] === "send-pull") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && getallheaders()["What-Post"] === "send-pull") {
   header("Content-Type: text/plain");
+
   $data = file_get_contents("php://input");
   $pull = json_decode($data, true);
 
@@ -66,6 +72,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && getallheaders()["what-post"] === "se
   $liste = array_values($liste);
   updateListFile();
   echo $removed;
-  // Må legge til en "er her" faktor til det å ta vekk navn. 
-  // Må også legge til lagring av vinner per dag og dager trukket.
+}
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && getallheaders()["What-Post"] === "save-results-date") {
+  header("Content-Type: application/json");
+
+  $data = file_get_contents("php://input");
+  $results = json_decode($data, true);
+
+  if (file_exists($jsonSavedResults)) {
+    $savedResults = json_decode(file_get_contents($jsonSavedResults));
+  } else {
+    $savedResults = new stdClass();
+  }
+
+  $resultKey = $results['key'];
+  $resultToSave = $results['value'];
+  $savedResults->$resultKey = $resultToSave;
+
+  file_put_contents($jsonSavedResults, json_encode($savedResults, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+  echo json_encode(["status" => "success"]);
+}
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && getallheaders()["What-Post"] === "openedDates") {
+  header('Content-Type: application/json');
+  error_log("afw");
+  if (file_exists($jsonSavedResults)) {
+    $openedBoxes = json_decode(file_get_contents($jsonSavedResults), true);
+    error_log(print_r($openedBoxes, true));
+    echo json_encode($openedBoxes, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+  } else {
+    error_log("Ingen lagret resultat eller klarte ikke å åpne");
+  }
 }

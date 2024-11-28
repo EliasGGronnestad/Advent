@@ -18,6 +18,12 @@ require_once("_topp.php");
   <div class="kalender">
     <a href="regNavn.php"><img src="images/holly.png" id="holly"></a>
     <div id="presents_container">
+      <div class="showPrevWinners">
+        <div class="backToTop">^</div>
+        <span id="winner1"></span>
+        <span id="winner2"></span>
+        <span id="winner3"></span>
+      </div>
       <div class="presentBar">
         <div class="present">
           <img class="base" src="images/presentBase.png">

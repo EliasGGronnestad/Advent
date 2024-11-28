@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 session_start();
 ini_set("display_errors", 1);
@@ -7,13 +7,11 @@ error_reporting(E_ALL);
 
 $rot = "/IT2/Advent/";
 
-function beskyttSide($rolle) {
+function beskyttSide($rolle)
+{
   global $rot;
   if ($_SESSION["rolle"] != $rolle) {
-    header("location:" . $rot ."login.php");
+    header("location:" . $rot . "login.php");
     die();
   }
 }
-
-
-?>

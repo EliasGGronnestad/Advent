@@ -1,3 +1,7 @@
+:root {
+  font-family: monospace;
+}
+
 body {
   margin: 0;
   background-color: #202030;
@@ -7,7 +11,7 @@ body {
   z-index: 2000;
 }
 
-body::before{
+body::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -15,6 +19,7 @@ body::before{
   backdrop-filter: blur(4px);
   z-index: -11;
 }
+
 body::after {
   content: "";
   position: absolute;
@@ -24,6 +29,108 @@ body::after {
   background-position: -10vw;
   z-index: -10;
   backdrop-filter: blur(2px);
+}
+
+.displayWinner {
+  text-align: center;
+  top: 40%;
+  visibility: hidden;
+  width: min-content;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  z-index: 9999;
+  font-size: 4rem;
+  pointer-events: none;
+  box-shadow: 0px 0px 100px -20px black;
+  background-color: black;
+  border: white solid 4px;
+  color: white;
+  padding: 2rem;
+}
+
+.winnerShow {
+  visibility: visible;
+}
+
+.lagreResultater {
+  font-size: 3rem;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2rem;
+  top: 45%;
+  visibility: hidden;
+  color: white;
+  background-color: black;
+  border: white solid 4px;
+  border-radius: 1rem;
+  z-index: 0;
+  display: block;
+  cursor: pointer;
+}
+
+.erHerPopup {
+  background-color: rgba(0, 0, 0, 0.8);
+  ;
+  color: white;
+  position: fixed;
+  right: 0;
+  transform: translateX(100%);
+  top: 20vh;
+  z-index: 5000;
+  padding: 2rem;
+  border-radius: 2rem 0 0 2rem;
+  border: solid 4px white;
+  border-right: none;
+
+  transition: all 0.5s;
+
+  button {
+    background-color: white;
+    border-radius: 1rem;
+    color: black;
+    padding: 1rem;
+    font-size: 2rem;
+    margin: 0.5rem;
+    cursor: pointer;
+  }
+
+  button:active {
+    background-color: #cccccc;
+  }
+
+
+  h2 {
+    font-size: 3rem;
+  }
+}
+
+.backToTop {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  aspect-ratio: 1/1;
+  visibility: hidden;
+  z-index: 450;
+  background-color: white;
+  font-size: 4rem;
+  border-radius: 1rem;
+  padding: 1rem;
+  border: black solid 4px;
+  cursor: pointer;
+  pointer-events: all;
+  transition: all 0.25s;
+}
+
+.backToTop:hover {
+  background-color: rgb(230, 230, 230);
+  transform: translateY(-10px);
+}
+
+.erHerPopup.isVisible {
+  transform: translateX(0%);
 }
 
 .center {
@@ -83,7 +190,7 @@ tr {
 }
 
 .kalender {
-  width: 1200px;
+  max-width: 1200px;
   margin: auto;
   border: solid 2px red;
   height: 800px;
@@ -106,6 +213,7 @@ tr {
   width: 18rem;
   rotate: -35deg;
   transform: translate(-25%, -80%);
+  z-index: 1000;
 }
 
 #inner_kalender {
@@ -118,6 +226,30 @@ tr {
   box-shadow: inset 0 0 20px 0 black;
 }
 
+
+.showPrevWinners {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+  pointer-events: none;
+  visibility: hidden;
+
+
+  span {
+    font-size: 4rem;
+    padding: 2rem 0;
+    text-align: center;
+    word-wrap: break-word;
+    width: 100%;
+  }
+}
+
+
+
 #presents_container {
   background: #ffffff;
   width: calc(100% - 2rem);
@@ -129,6 +261,7 @@ tr {
 
 .boks_kalender {
   border: solid 1px red;
+  aspect-ratio: 1/1;
   font-size: 3rem;
   margin: 1rem;
   border-radius: 2rem;
@@ -137,47 +270,65 @@ tr {
   align-items: center;
   position: relative;
   color: black;
+  cursor: pointer;
   background: repeating-linear-gradient(45deg,
       #aa1010,
       #aa1010 10px,
       #ffffff 10px,
       #ffffff 20px);
   box-shadow: 0 0 10px 0 black;
+
+  :hover {
+    background-color: rgb(230, 230, 230);
+    transform: translateY(-6px);
+  }
 }
 
 
 .child_boks {
   color: black;
-  aspect-ratio: 1/1;
+  height: 80%;
   width: 80%;
   background-color: white;
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
   border-radius: 1rem;
-  transition: transform 3s;
+  transition: transform 0.3s;
+
+
 }
 
 .opened {
-  background: #000000;
-  color: white;
+  box-shadow: black 0 0 100px -10px;
   animation: box_drop 1.25s;
   animation-fill-mode: forwards;
   z-index: 200;
   position: relative;
 }
 
-
+.dateOpened::after {
+  content: "X";
+  font-size: 4rem;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
 
 @keyframes box_drop {
   0% {
     transform: translateY(0);
     animation-timing-function: ease-out;
   }
+
   25% {
     transform: translateY(-200%);
     animation-timing-function: ease-in;
   }
+
   100% {
     transform: translateY(100vh);
     animation-timing-function: ease-in;
@@ -197,7 +348,7 @@ tr {
   inset: 0;
   pointer-events: none;
   z-index: 1000;
-  background: rgb(255, 255, 220 );
+  background: rgb(255, 255, 220);
   opacity: 0.0;
   clip-path: polygon(85% 0, 90% 0, 135% 100%, 110% 100%);
   transition: all 2s;
@@ -208,7 +359,7 @@ tr {
   inset: 0;
   pointer-events: none;
   z-index: 1000;
-  background: rgb(255, 255, 220 );
+  background: rgb(255, 255, 220);
   opacity: 0.0;
   clip-path: polygon(55% 0, 60% 0, 135% 100%, 110% 100%);
   transition: all 2s;
@@ -219,7 +370,7 @@ tr {
   inset: 0;
   pointer-events: none;
   z-index: 1000;
-  background: rgb(255, 255, 220 );
+  background: rgb(255, 255, 220);
   opacity: 0.0;
   clip-path: polygon(0% 0, 5% 0, -10% 100%, -35% 100%);
   transition: all 2s;
@@ -248,7 +399,8 @@ tr {
   opacity: 0;
   transition: opacity 2s;
   pointer-events: none;
-  
+  box-shadow: 0 0 400px 200px black;
+
 }
 
 .light_off_trans {
@@ -274,6 +426,7 @@ tr {
   width: 100px;
   position: relative;
   z-index: 1200;
+  cursor: pointer;
 }
 
 .base {
@@ -309,3 +462,13 @@ tr {
   top: 30%;
   font-size: 4rem;
 }
+
+
+.show {
+  visibility: visible;
+  z-index: 5000;
+
+}
+
+
+
