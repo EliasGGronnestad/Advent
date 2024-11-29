@@ -84,9 +84,9 @@ function boks_click(index) {
       document.getElementById(index).classList.add("opened");
       document.querySelector(".showPrevWinners").classList.add("show");
 
-      document.getElementById("winner1").innerText = openedDatesData[index][0];
-      document.getElementById("winner2").innerText = openedDatesData[index][1];
-      document.getElementById("winner3").innerText = openedDatesData[index][2];
+      document.getElementById("winner1").innerText = openedDatesData[index][0].join(" ");
+      document.getElementById("winner2").innerText = openedDatesData[index][1].join(" ");
+      document.getElementById("winner3").innerText = openedDatesData[index][2].join(" ");
 
       document.querySelector(".backToTop").classList.add("show");
 
@@ -181,7 +181,8 @@ async function openPresent(index) {
       winner.innerText = winnersToday[index];
       lukk = true;
     } else {
-      winner.innerText = elev_pools[index][pullIndex];
+      winner.innerText = elev_pools[index][pullIndex].join(" ");
+      ;
       lukk = false;
     }
 
