@@ -13,3 +13,5 @@
 
   Brukernavn og passord for nettsiden ligger i - og kan endres i login.php i
   linjen: 'if ($brukernavn == "admin" && $passord == "hemmelig")'
+
+
